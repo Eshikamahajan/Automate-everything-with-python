@@ -3,6 +3,7 @@ from module1 import PDF_MC_Table
 import random
 import pandas as pd
 import numpy as np
+import openpyxl
 import datetime
 print("hello")
 fontSize=10
@@ -14,18 +15,24 @@ def get_final_df(xlsFile):
     xls = pd.ExcelFile(xlsFile)
     df1 = pd.read_excel(xls, 'agenda')
     df2 = pd.read_excel(xls, 'roleplayers')
+    print(f"printing agenda workbook {df1}")
+    print(f"printing role players workbook {df2}")
+
     rolePlayers=dict()
 
     for index, row in df2.iterrows():
         rolePlayers[row[0]]=row[1] #dictionary from df, used this function because wanted in a particular format
-
+    print(f" printing role player dictionary{rolePlayers}")
     for i in range(0, len(df1)):
         key=df1.loc[i,'role players'] #finding the role player written in agenda
         #iterating over the dictionary keys to find the rol player, if present
         #subsitute the value of the role player
         if key in rolePlayers.keys():
-            print(key)
+            print("PRINTING ROLE AND ROLE PLAYER NAME")
+            print(key,rolePlayers[key])
             df1.loc[i,'role players']=rolePlayers[key]
+    print("inside get final df function that returns the role player name df")
+    print(df1)
     return df1  # return the final dataframe with role player names for agenda
 
 # this function will take the ending time of the previous activity and add the allotted time to it
@@ -94,20 +101,20 @@ def timing(df):
     df_exp=df.copy()
     #df_exp=df_exp[['time', 'time allotted']]
     df_exp['time']='6:30 pm'
-    print(df_exp)
+    #print(df_exp)
     for i in range(0, len(df_exp)):
         if i!=0:
             time = str(df_exp.loc[i-1, 'time']).lower()
             time_allotted=str(df_exp.loc[i-1, 'time allotted']).lower()
-            print(f"---- original time is: {time} and time to add is : {time_allotted}")
+            #print(f"---- original time is: {time} and time to add is : {time_allotted}")
             df_exp.loc[i,'time']=str(new_time(time,time_allotted))
-            print(df_exp.loc[i,'time'])
-    print(df_exp)
+            #print(df_exp.loc[i,'time'])
+    #print(df_exp)
     df_exp=df_exp.replace(np.nan, '')
     return df_exp
 
 #makes agenda pdf  
-def make_pdf():
+def make_pdf(df):
     pdf = PDF_MC_Table()
     pdf.add_page()
     pdf.set_font(family='Times', style='B', size=fontSize)
@@ -138,7 +145,7 @@ def make_pdf():
     pdf.cell(w=35, h=height, txt="Role Player", border=1,fill=True)
     pdf.cell(w=25, h=height, txt="Time allotted",border=1,ln=1,fill=True)
 
-    df=get_final_df('Automate-everything-with-python/AgendaRolePlayerAutomation/CAMTMagenda.xlsx')
+    #df=get_final_df('Automate-everything-with-python/AgendaRolePlayerAutomation/CAMTMagenda.xlsx')
     
     df_time=timing(df)
     pdf.set_font(family='Times', size=fontSize)
@@ -155,10 +162,9 @@ def make_pdf():
     pdf.set_fill_color(21, 107, 136)
     pdf.cell(w=0, h=height, txt="Networking Session", align='C', border=1,fill=True)
     #PRINTING THE PDF
-    pdf.output("Automate-everything-with-python/AgendaRolePlayerAutomation/MeetingNo2.pdf")
+    #pdf.output("Automate-everything-with-python/AgendaRolePlayerAutomation/OutPut/MeetingNo2.pdf")
+    return df_time,pdf
 
-if __name__=="__main__":
-    make_pdf()
 
 '''
 #EXPERIMENT WITH THE ROWS
