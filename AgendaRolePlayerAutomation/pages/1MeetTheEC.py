@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from PIL import Image
-MediaFolder='Automate-everything-with-python/AgendaRolePlayerAutomation/Assets/'
+MediaFolder='./Assets/'
 st.title("Meet the Executive Comittee of Connected Accross Miles Toastmasters Club")
 Eshika=MediaFolder+'Eshika.png'
 Nimisha=MediaFolder+'Nimisha.png'

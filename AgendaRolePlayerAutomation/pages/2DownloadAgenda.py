@@ -18,7 +18,7 @@ def agenda():
         st.write(uploaded_files)
         df=main_file.get_final_df(uploaded_files)
         df,pdf=main_file.make_pdf(df)
-        filename="Automate-everything-with-python/AgendaRolePlayerAutomation/OutPut/Final.pdf"
+        filename="./OutPut/Final.pdf"
         pdf.output(filename)
         st.write("A demo of your agenda")
         st.write(df)
